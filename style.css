@@ -1,0 +1,63 @@
+/*
+	Helplessly hacked together by Jason Brennan, Fall 2013
+*/
+
+
+html {
+
+}
+
+
+body {
+/* 	margin: 20px;
+	border: 2px #000 solid; */
+	font-family: "Lora", "Helvetica Neue", Helvetica, sans-serif;
+	
+	line-height: 1.9;
+	/* background-color: #fefeef; */
+	background-color: white;
+	color:#3c372f;
+}
+
+a {
+/* 	color: #5d4a32; */
+	color: #83231f;
+}
+
+.content {
+	width: 560px;
+	margin-left: 70px;
+/* 	margin-left: auto; */
+/* 	margin-right: auto; */
+}
+
+p {
+	font-size: 16px;
+	text-align: justify;
+	margin-top: 1.7em;
+	margin-bottom: 1.7em;
+	position: relative;
+	-webkit-hyphens: auto;
+}
+
+.aside {
+  margin-right: -300px;
+  position: absolute;
+  right: 0;
+  top: auto; /* default */
+  width: 250px;
+  font-size: 80%;
+  -webkit-hyphens: auto;
+  color: #a0a1a3;
+}
+
+#draw_square {
+	background-image: -webkit-image-set(
+		url(Draw_Square.png) 1x,
+		url(Draw_Square@2x.png) 2x
+	);
+	background-size: 550px 481px;
+	width: 550px;
+	height: 481px;
+	margin: 0px auto;
+}
