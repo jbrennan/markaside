@@ -51,13 +51,12 @@ p {
   color: #a0a1a3;
 }
 
-#draw_square {
-	background-image: -webkit-image-set(
-		url(Draw_Square.png) 1x,
-		url(Draw_Square@2x.png) 2x
-	);
-	background-size: 550px 481px;
-	width: 550px;
-	height: 481px;
-	margin: 0px auto;
+hr {
+	border: 0;
+	text-align: center;
+	font-size: 1.9em;
+}
+
+hr:after { 
+  content: "❧";
 }
