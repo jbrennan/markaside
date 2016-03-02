@@ -1,5 +1,6 @@
 require 'redcarpet'
 require 'json'
+require 'erb'
 
 class Markaside < Redcarpet::Render::HTML
 	def preprocess(text)
@@ -13,7 +14,7 @@ class Markaside < Redcarpet::Render::HTML
 		# message.gsub!(/({.*})/, "<span class=\"aside\">#{$0}.class</span>")
 		message.gsub!(/{.*}/) do |w|
 			aside = w.gsub("{", "").gsub("}", "") # yes, this is a crappy and slow way to do get rid of the braces, but I don't care. It works.
-			"\\*<span class='aside'>\\* #{aside}</span>"
+			"<span class='asterisk'>\\*</span><span class='aside'><span class='asterisk'>\\* </span>#{aside}</span>"
 		end
 		message
 	end
@@ -64,6 +65,30 @@ filename = config["markdown_filename"]
 outname = config["output_filename"]
 title = config["html_title"]
 
+# I know these configs aren't elegant, it's a hack for now!
+extra_css = config["extra_css"]
+if extra_css != nil
+	extra_css = "<link href='#{extra_css}' media='screen' rel='stylesheet'>"
+else
+	extra_css = ""
+end
+
+# get a specific header, if it exists
+header = config["header"]
+if header != nil
+	header = ERB.new(File.read(header)).result()
+else
+	header = ""
+end
+
+# get a specific footer, if it exists
+footer = config["footer"]
+if footer != nil
+	footer = ERB.new(File.read(footer)).result()
+else
+	footer = ""
+end
+
 body = File.read(filename)
 
 render = Markaside.new
@@ -72,13 +97,15 @@ smarty_html = Redcarpet::Render::SmartyPants.render html
 
 # todo: use ERB or something for this template
 output = 	"<!DOCTYPE html>"\
-					"<html>"\
+					"<html lang='en'>"\
 					"	<head>"\
 					"<link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>"\
 					"<meta charset='utf-8'>"\
+					"<meta name='viewport' content='width=device-width'>"\
 					"<link href='markaside/style.css' media='screen' rel='stylesheet'>"\
+					"#{extra_css}"\
 					"<title>#{title}</title></head>"\
-					"	<body><div class='content'>#{smarty_html}</div></body>"\
+					"	<body>#{header}<section class='main_col'><div class='content'>#{smarty_html}</div></section>#{footer}</body>"\
 					"</html>"
 File.open(outname, 'w') { |file|
 	file.write(output)

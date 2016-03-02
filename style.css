@@ -38,6 +38,13 @@ p {
 	margin-bottom: 1.7em;
 	position: relative;
 	-webkit-hyphens: auto;
+	-moz-hyphens: auto;
+	-ms-hyphens: auto;
+	hyphens: auto;
+}
+
+img {
+	max-width: 100%; /* probably don't always want this, though. */
 }
 
 .aside {
@@ -60,3 +67,53 @@ hr {
 hr:after { 
   content: "❧";
 }
+
+/****************************
+	Mobile styles
+****************************/
+
+@media screen and (max-width: 480px) {
+	.content {
+		width: inherit;
+		margin-left: 15px;
+		margin-right: 15px;
+	}
+	
+	.aside {
+		margin-right: inherit;
+		position: inherit;
+		right: inherit;
+		top: inherit;
+		width: inherit;
+		font-size: inherit;
+	}
+	
+	span.aside:before {
+	    content: ' ('; /* add an extra space before the opening paren */
+	}
+	
+	span.aside:after {
+	    content: ')';
+	}
+	
+	span.asterisk {
+		display: none;
+	}
+	
+	blockquote {
+		margin-left: 1.3em;
+		margin-right: 1.3em;
+		
+		border-left: 1px solid #8f8f8f;
+		padding-left: 1em;
+		padding-right: 1em;
+	}
+	
+	blockquote ul {
+		padding-left: 1em;
+		padding-right: 0;
+	}
+	
+	
+}
+
