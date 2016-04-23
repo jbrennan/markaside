@@ -24,14 +24,19 @@ end
 
 def generate_blank_config(filename)
 	# markdown filename, output path + filename, html title
+	html_template_name = "index.erb"
 	config = {
 		markdown_filename: "path/to/markdown.md",
 		output_filename: "path/to/index.html",
-		html_title: "I want this to be my title"
+		html_template: html_template_name
 	}
 	
 	File.open(filename, 'w') { |file|
 		file.write(JSON.pretty_generate(config))
+	}
+	
+	File.open(html_template_name, 'w') { |file|
+		file.write(File.read("markaside/index_template.erb"))
 	}
 end
 
@@ -63,50 +68,41 @@ config = read_or_make_config(config_filename)
 
 filename = config["markdown_filename"]
 outname = config["output_filename"]
-title = config["html_title"]
+html_template = config["html_template"]
 
 # I know these configs aren't elegant, it's a hack for now!
-extra_css = config["extra_css"]
-if extra_css != nil
-	extra_css = "<link href='#{extra_css}' media='screen' rel='stylesheet'>"
-else
-	extra_css = ""
-end
+# extra_css = config["extra_css"]
+# if extra_css != nil
+#   extra_css = "<link href='#{extra_css}' media='screen' rel='stylesheet'>"
+# else
+#   extra_css = ""
+# end
 
 # get a specific header, if it exists
-header = config["header"]
-if header != nil
-	header = ERB.new(File.read(header)).result()
-else
-	header = ""
-end
+# header = config["header"]
+# if header != nil
+#   header = ERB.new(File.read(header)).result()
+# else
+#   header = ""
+# end
 
 # get a specific footer, if it exists
-footer = config["footer"]
-if footer != nil
-	footer = ERB.new(File.read(footer)).result()
-else
-	footer = ""
-end
+# footer = config["footer"]
+# if footer != nil
+#   footer = ERB.new(File.read(footer)).result()
+# else
+#   footer = ""
+# end
 
 body = File.read(filename)
 
 render = Markaside.new
 html = Redcarpet::Markdown.new(render).render(body)
-smarty_html = Redcarpet::Render::SmartyPants.render html
+@smarty_html = Redcarpet::Render::SmartyPants.render html
 
 # todo: use ERB or something for this template
-output = 	"<!DOCTYPE html>"\
-					"<html lang='en'>"\
-					"	<head>"\
-					"<link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>"\
-					"<meta charset='utf-8'>"\
-					"<meta name='viewport' content='width=device-width'>"\
-					"<link href='markaside/style.css' media='screen' rel='stylesheet'>"\
-					"#{extra_css}"\
-					"<title>#{title}</title></head>"\
-					"	<body>#{header}<section class='main_col'><div class='content'>#{smarty_html}</div></section>#{footer}</body>"\
-					"</html>"
+output = 	ERB.new(File.read(html_template)).result
+
 File.open(outname, 'w') { |file|
 	file.write(output)
 }
